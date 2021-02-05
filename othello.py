@@ -87,120 +87,132 @@ class State:
                 x = i - 1
                 y = j - 1
                 if (x >= 0) and (y >= 0) and board[x][y] == other_plyr:
+                    x -= 1
+                    y -= 1
                     while (x >= 0) and (y >= 0):
-                        x -= 1
-                        y -= 1
                         if board[x][y] == plyr:
                             legal_moves.append((i, j))
                             found = True
                             break
                         elif board[x][y] == EMPTY:
                             break
+                        x -= 1
+                        y -= 1
                 if found:
                     continue
 
                 x = i - 1
                 y = j + 1
                 if (x >= 0) and (y < NCOLS) and board[x][y] == other_plyr:
+                    x -= 1
+                    y += 1
                     while (x >= 0) and (y < NCOLS):
-                        x -= 1
-                        y += 1
                         if board[x][y] == plyr:
                             legal_moves.append((i, j))
                             found = True
                             break
                         elif board[x][y] == EMPTY:
                             break
+                        x -= 1
+                        y += 1
                 if found:
                     continue
 
                 x = i + 1
                 y = j - 1
                 if (x < NROWS) and (y >= 0) and board[x][y] == other_plyr:
+                    x += 1
+                    y -= 1
                     while (x < NROWS) and (y >= 0):
-                        x += 1
-                        y -= 1
                         if board[x][y] == plyr:
                             legal_moves.append((i, j))
                             found = True
                             break
                         elif board[x][y] == EMPTY:
                             break
+                        x += 1
+                        y -= 1
                 if found:
                     continue
 
                 x = i + 1
                 y = j + 1
                 if (x < NROWS) and (y < NCOLS) and board[x][y] == other_plyr:
+                    x += 1
+                    y += 1
                     while (x < NROWS) and (y < NCOLS):
-                        x += 1
-                        y += 1
                         if board[x][y] == plyr:
                             legal_moves.append((i, j))
                             found = True
                             break
                         elif board[x][y] == EMPTY:
                             break
+                        x += 1
+                        y += 1
                 if found:
                     continue
 
                 x = i
                 y = j + 1
                 if (y < NCOLS) and board[x][y] == other_plyr:
+                    y += 1
                     while (y < NCOLS):
-                        y += 1
                         if board[x][y] == plyr:
                             legal_moves.append((i, j))
                             found = True
                             break
                         elif board[x][y] == EMPTY:
                             break
+                        y += 1
                 if found:
                     continue
 
                 x = i
                 y = j - 1
                 if (y >= 0) and board[x][y] == other_plyr:
+                    y -= 1
                     while (y >= 0):
-                        y -= 1
                         if board[x][y] == plyr:
                             legal_moves.append((i, j))
                             found = True
                             break
                         elif board[x][y] == EMPTY:
                             break
+                        y -= 1
                 if found:
                     continue
 
                 x = i + 1
                 y = j
                 if (x < NROWS) and board[x][y] == other_plyr:
+                    x += 1
                     while (x < NROWS):
-                        x += 1
                         if board[x][y] == plyr:
                             legal_moves.append((i, j))
                             found = True
                             break
                         elif board[x][y] == EMPTY:
                             break
+                        x += 1
                 if found:
                     continue
 
                 x = i - 1
                 y = j
                 if (x >= 0) and board[x][y] == other_plyr:
+                    x -= 1
                     while (x >= 0):
-                        x -= 1
                         if board[x][y] == plyr:
                             legal_moves.append((i, j))
                             found = True
                             break
                         elif board[x][y] == EMPTY:
                             break
+                        x -= 1
                 if found:
                     continue
 
-        return legal_moves
+        return deepcopy(legal_moves)
 
     def isTerminal(self):
         return self.getPossibleActions() == []
@@ -218,15 +230,24 @@ class State:
                     black_count += 1
         return (white_count, black_count)
 
-    def get_reward(self):
+    def getReward(self):
         assert self.isTerminal()
         (white_count, black_count) = self.count_pieces()
         if white_count > black_count:
-            return WHITE_WIN
+            if self.player:
+                return 1
+            else:
+                return 0
+            # return WHITE_WIN
         elif white_count == black_count:
-            return TIE
+            return 0
+            # return TIE
         else:
-            return BLACK_WIN
+            if self.player:
+                return 1
+            else:
+                return 0
+            # return BLACK_WIN
 
     def takeAction(self, action):
         assert type(action) == tuple
@@ -251,192 +272,204 @@ class State:
         x = i - 1
         y = j - 1
         if (x >= 0) and (y >= 0) and board[x][y] == other_plyr:
+            x -= 1
+            y -= 1
             while (x >= 0) and (y >= 0):
-                x -= 1
-                y -= 1
                 if board[x][y] == plyr:
                     ld = True
                     break
                 elif board[x][y] == EMPTY:
                     break
+                x -= 1
+                y -= 1
         x = i - 1
         y = j + 1
         if (x >= 0) and (y < NCOLS) and board[x][y] == other_plyr:
+            x -= 1
+            y += 1
             while (x >= 0) and (y < NCOLS):
-                x -= 1
-                y += 1
                 if board[x][y] == plyr:
                     lu = True
                     break
                 elif board[x][y] == EMPTY:
                     break
+                x -= 1
+                y += 1
 
         x = i + 1
         y = j - 1
         if (x < NROWS) and (y >= 0) and board[x][y] == other_plyr:
+            x += 1
+            y -= 1
             while (x < NROWS) and (y >= 0):
-                x += 1
-                y -= 1
                 if board[x][y] == plyr:
                     rd = True
                     break
                 elif board[x][y] == EMPTY:
                     break
+                x += 1
+                y -= 1
 
         x = i + 1
         y = j + 1
         if (x < NROWS) and (y < NCOLS) and board[x][y] == other_plyr:
+            x += 1
+            y += 1
             while (x < NROWS) and (y < NCOLS):
-                x += 1
-                y += 1
                 if board[x][y] == plyr:
                     ru = True
                     break
                 elif board[x][y] == EMPTY:
                     break
+                x += 1
+                y += 1
 
         x = i
         y = j + 1
         if (y < NCOLS) and board[x][y] == other_plyr:
+            y += 1
             while (y < NCOLS):
-                y += 1
                 if board[x][y] == plyr:
                     up = True
                     break
                 elif board[x][y] == EMPTY:
                     break
+                y += 1
 
         x = i
         y = j - 1
         if (y >= 0) and board[x][y] == other_plyr:
+            y -= 1
             while (y >= 0):
-                y -= 1
                 if board[x][y] == plyr:
                     down = True
                     break
                 elif board[x][y] == EMPTY:
                     break
+                y -= 1
 
         x = i + 1
         y = j
         if (x < NROWS) and board[x][y] == other_plyr:
+            x += 1
             while (x < NROWS):
-                x += 1
                 if board[x][y] == plyr:
                     right = True
                     break
                 elif board[x][y] == EMPTY:
                     break
+                x += 1
 
         x = i - 1
         y = j
         if (x >= 0) and board[x][y] == other_plyr:
+            x -= 1
             while (x >= 0):
-                x -= 1
                 if board[x][y] == plyr:
                     left = True
                     break
                 elif board[x][y] == EMPTY:
                     break
+                x -= 1
 
         if left:
-            x = i
+            x = i - 1
             y = j
             while (x >= 0):
-                x -= 1
                 if board[x][y] == plyr:
                     break
                 elif board[x][y] == other_plyr:
                     board[x][y] = plyr
                 elif board[x][y] == EMPTY:
                     break
+                x -= 1
         if right:
-            x = i
+            x = i + 1
             y = j
             while (x < NROWS):
-                x += 1
                 if board[x][y] == plyr:
                     break
                 elif board[x][y] == other_plyr:
                     board[x][y] = plyr
                 elif board[x][y] == EMPTY:
                     break
+                x += 1
 
         if up:
             x = i
-            y = j
+            y = j + 1
             while (y < NROWS):
-                y += 1
                 if board[x][y] == plyr:
                     break
                 elif board[x][y] == other_plyr:
                     board[x][y] = plyr
                 elif board[x][y] == EMPTY:
                     break
+                y += 1
 
         if down:
             x = i
-            y = j
+            y = j - 1
             while (y >= 0):
-                y -= 1
                 if board[x][y] == plyr:
                     break
                 elif board[x][y] == other_plyr:
                     board[x][y] = plyr
                 elif board[x][y] == EMPTY:
                     break
+                y -= 1
 
         if lu:
-            x = i
-            y = j
+            x = i - 1
+            y = j + 1
             while (x >= 0) and (y < NROWS):
-                x -= 1
-                y += 1
                 if board[x][y] == plyr:
                     break
                 elif board[x][y] == other_plyr:
                     board[x][y] = plyr
                 elif board[x][y] == EMPTY:
                     break
+                x -= 1
+                y += 1
 
         if ld:
-            x = i
-            y = j
+            x = i - 1
+            y = j - 1
             while (x >= 0) and (y >= 0):
+                if board[x][y] == plyr:
+                    break
+                elif board[x][y] == other_plyr:
+                    board[x][y] = plyr
+                elif board[x][y] == EMPTY:
+                    break
                 x -= 1
                 y -= 1
-                if board[x][y] == plyr:
-                    break
-                elif board[x][y] == other_plyr:
-                    board[x][y] = plyr
-                elif board[x][y] == EMPTY:
-                    break
 
         if ru:
-            x = i
-            y = j
+            x = i + 1
+            y = j + 1
             while (x < NCOLS) and (y < NROWS):
+                if board[x][y] == plyr:
+                    break
+                elif board[x][y] == other_plyr:
+                    board[x][y] = plyr
+                elif board[x][y] == EMPTY:
+                    break
                 x += 1
                 y += 1
-                if board[x][y] == plyr:
-                    break
-                elif board[x][y] == other_plyr:
-                    board[x][y] = plyr
-                elif board[x][y] == EMPTY:
-                    break
 
         if rd:
-            x = i
-            y = j
+            x = i + 1
+            y = j - 1
             while (x < NCOLS) and (y >= 0):
-                x += 1
-                y -= 1
                 if board[x][y] == plyr:
                     break
                 elif board[x][y] == other_plyr:
                     board[x][y] = plyr
                 elif board[x][y] == EMPTY:
                     break
+                x += 1
+                y -= 1
 
         self.switch_player()
 

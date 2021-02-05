@@ -23,7 +23,7 @@ def game_loop(game, searcher, p1_move, p2_move):
         game.takeAction(move)
 
         if game.isTerminal():
-            victory = game.get_reward()
+            victory = game.getReward()
             if victory > 0:
                 print(f"Player 1 Wins : {victory}")
             elif victory == 0:
@@ -39,10 +39,11 @@ def game_loop(game, searcher, p1_move, p2_move):
         print("Player 2 To Move")
         num_moves += 1
         move = p2_move(game, searcher)
+        print(move)
         game.takeAction(move)
 
         if game.isTerminal():
-            victory = game.get_reward()
+            victory = game.getReward()
             if victory > 0:
                 print(f"Player 1 Wins : {victory}")
             elif victory == 0:
