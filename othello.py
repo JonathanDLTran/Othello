@@ -199,7 +199,7 @@ class State:
 
         return legal_moves
 
-    def is_terminal(self):
+    def isTerminal(self):
         return self.getPossibleActions() == []
 
     def count_pieces(self):
@@ -216,7 +216,7 @@ class State:
         return (white_count, black_count)
 
     def get_reward(self):
-        assert self.is_terminal()
+        assert self.isTerminal()
         (white_count, black_count) = self.count_pieces()
         if white_count > black_count:
             return WHITE_WIN

@@ -1,10 +1,13 @@
 import time
 
+from mcts import mcts
+
 import othello
 import human_player
+import mcts_player
 
 
-def game_loop(game, p1_move, p2_move):
+def game_loop(game, searcher, p1_move, p2_move):
 
     print("Start of game")
     print(game)
@@ -16,10 +19,10 @@ def game_loop(game, p1_move, p2_move):
 
         print("Player 1 To Move")
         num_moves += 1
-        move = p1_move(game)
+        move = p1_move(game, searcher)
         game.takeAction(move)
 
-        if game.is_terminal():
+        if game.isTerminal():
             victory = game.get_reward()
             if victory > 0:
                 print(f"Player 1 Wins : {victory}")
@@ -35,10 +38,10 @@ def game_loop(game, p1_move, p2_move):
 
         print("Player 2 To Move")
         num_moves += 1
-        move = p2_move(game)
+        move = p2_move(game, searcher)
         game.takeAction(move)
 
-        if game.is_terminal():
+        if game.isTerminal():
             victory = game.get_reward()
             if victory > 0:
                 print(f"Player 1 Wins : {victory}")
@@ -62,16 +65,19 @@ def init_game():
 
 def main(p1_move, p2_move):
     game = init_game()
-    game_loop(game, p1_move, p2_move)
+    searcher = mcts(timeLimit=1000)
+    game_loop(game, searcher, p1_move, p2_move)
 
 
 def choose_player(player):
     print(f"Choose a player for {'Player 1' if player else 'Player 2'}: ")
-    print(f"Type 'H' for human, 'Q' to quit")
+    print(f"Type 'H' for human, 'M' for MCTS, 'Q' to quit")
     choice = input("Enter your choice: ")
     choice = choice.strip().lower()
     if choice == 'h':
         return human_player.move
+    elif choice == 'm':
+        return mcts_player.move
     elif choice == 'q':
         print("Quitting...")
         exit(0)

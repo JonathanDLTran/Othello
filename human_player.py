@@ -4,7 +4,7 @@ INVERTED_DICT = {ALPHA_DICT[key]: key for key in ALPHA_DICT}
 ROWS_LIST = ["1", "2", "3", "4", "5", "6", "7", "8"]
 
 
-def move(game):
+def move(game, searcher):
     legal_moves = game.getPossibleActions()
     while True:
         print(game)
