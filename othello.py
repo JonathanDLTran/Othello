@@ -68,6 +68,9 @@ class State:
     def switch_player(self):
         self.player = not self.player
 
+    def getCurrentPlayer(self):
+        return 1 if self.player else -1
+
     def getPossibleActions(self):
         legal_moves = []
         board = self.board
@@ -436,6 +439,8 @@ class State:
                     break
 
         self.switch_player()
+
+        return deepcopy(self)
 
     def __str__(self):
         """
