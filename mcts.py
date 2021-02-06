@@ -6,6 +6,12 @@
 import math
 import random
 
+####### CONSTANTS ########
+
+C = math.sqrt(2)
+
+####### CODE #############
+
 
 class Node:
     def __init__(self, plyr, state):
@@ -16,8 +22,8 @@ class Node:
         self.visits = 0
         self.parent = None
 
-    def add_child(self):
-        pass
+    def add_child(self, child):
+        self.children.append(child)
 
     def ucb(self):
         return
@@ -36,30 +42,67 @@ class MCTS:
             self.simulation()
             self.backpropagation()
 
-    def selection(self):
-        pass
 
-    def expansion(self):
-        pass
-
-    def simulation(self, node):
-        assert type(node) == Node
-        assert not node.state.isTerminal()
-
-        actions = node.state.getPossibleActions()
-        rewards = 0
-        for action in actions:
-            childstate = node.state.takeAction(action)
-            reward = rollout(childstate)
-            rewards += reward
-
-    def backpropagation(self):
-        pass
+def ucb(node):
+    w = node.wins
+    n = node.visits
+    N = node.parent.visits if node.parent != None else n
+    return w/n + C * math.sqrt(math.log(N)/n)
 
 
-def rollout(state, choice_func=random.choice):
+def ucb_select(children):
+    assert type(children) == list
+
+    _max = 0
+    index = 0
+    for i, child in enumerate(children):
+        ucb_val = ucb(child)
+        if ucb_val > _max:
+            _max = ucb_val
+            index = i
+    return children[i]
+
+
+def selection(node):
+    while not node.state.isTerminal():
+        children = node.children
+        child = ucb_select(children)
+        node = child
+    return node
+
+
+def expansion(node):
+    new_child = Node()
+    new_child.parent = node
+    node.add_child(new_child)
+    return new_child
+
+
+def simulation(node, choice_func=random.choice):
+    state = node.state
     while not state.isTerminal():
         actions = state.getPossibleActions()
         action = choice_func(actions)
         state = state.takeAction(action)
     return state.getReward()
+
+
+def backpropagation(node, wins, visits=1):
+    assert (visits > 0)
+    assert (wins <= visits)
+
+    while node.parent != None:
+        node.wins += wins
+        node.visits += visits
+
+    return 0
+
+########## MAIN RUNNER ##########
+
+
+def main():
+    pass
+
+
+if __name__ == "__main__":
+    main()
