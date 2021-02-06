@@ -1,10 +1,10 @@
-ALPHA_DICT = {'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6, "G": 7, "I": 8,
-              'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5, 'f': 6, "g": 7, "i": 8}
+ALPHA_DICT = {'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6, "G": 7, "H": 8,
+              'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5, 'f': 6, "g": 7, "h": 8}
 INVERTED_DICT = {ALPHA_DICT[key]: key for key in ALPHA_DICT}
 ROWS_LIST = ["1", "2", "3", "4", "5", "6", "7", "8"]
 
 
-def move(game, searcher):
+def move(game):
     legal_moves = game.getPossibleActions()
     while True:
         print(game)

@@ -1,13 +1,12 @@
 import time
-
-from mcts import mcts
+from copy import deepcopy
 
 import othello
 import human_player
 import mcts_player
 
 
-def game_loop(game, searcher, p1_move, p2_move):
+def game_loop(game, p1_move, p2_move):
 
     print("Start of game")
     print(game)
@@ -19,7 +18,7 @@ def game_loop(game, searcher, p1_move, p2_move):
 
         print("Player 1 To Move")
         num_moves += 1
-        move = p1_move(game, searcher)
+        move = p1_move(game)
         game.takeAction(move)
 
         if game.isTerminal():
@@ -38,7 +37,7 @@ def game_loop(game, searcher, p1_move, p2_move):
 
         print("Player 2 To Move")
         num_moves += 1
-        move = p2_move(game, searcher)
+        move = p2_move(game)
         print(move)
         game.takeAction(move)
 
@@ -66,8 +65,7 @@ def init_game():
 
 def main(p1_move, p2_move):
     game = init_game()
-    searcher = mcts(timeLimit=1000)
-    game_loop(game, searcher, p1_move, p2_move)
+    game_loop(game, p1_move, p2_move)
 
 
 def choose_player(player):
