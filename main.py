@@ -44,11 +44,11 @@ def game_loop(game, p1_move, p2_move):
         if game.isTerminal():
             victory = game.getReward()
             if victory > 0:
-                print(f"Player 1 Wins : {victory}")
+                print(f"Player 2 Wins : {victory}")
             elif victory == 0:
                 print(f"Tie : {victory}")
             else:
-                print(f"Player 2 Wins : {victory}")
+                print(f"Player 1 Wins : {victory}")
             print(f"Rounds Played: {num_rounds}")
             print(f"Moves Made: {num_moves}")
             print(game)
